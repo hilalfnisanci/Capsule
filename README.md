@@ -26,59 +26,74 @@ Capsule allows users to capture written notes, photos, and voice memos and seal 
 
 ### Prerequisites
 
-- Node.js 18 or later
-- npm 9 or later
+- Node.js 18+
+- npm, yarn, or pnpm
 
 ### Installation
 
-```bash
-# Install dependencies
-npm install
-```
+1. Clone the repository:
 
-### Environment variables
+   ```bash
+   git clone https://github.com/hilalfnisanci/Capsule.git
+   cd Capsule
+   ```
 
-Copy the example file and fill in any values:
+2. Install dependencies:
 
-```bash
-cp .env.example .env.local
-```
+   ```bash
+   npm install
+   ```
 
-### Running locally
+3. Set up environment variables:
 
-```bash
-# Start the development server
-npm run dev
-```
+   ```bash
+   cp .env.example .env.local
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+   Edit `.env.local` and fill in any required values.
 
-### Other commands
+4. Start the development server:
 
-```bash
-# Type-check
-npx tsc --noEmit
+   ```bash
+   npm run dev
+   ```
 
-# Lint
-npm run lint
+   The app will be available at [http://localhost:3000](http://localhost:3000).
 
-# Format
-npm run format
+### Available Scripts
 
-# Production build
-npm run build
-npm run start
-```
+| Command                | Description                      |
+| ---------------------- | -------------------------------- |
+| `npm run dev`          | Start the development server     |
+| `npm run build`        | Build for production             |
+| `npm run start`        | Start the production server      |
+| `npm run lint`         | Run ESLint                       |
+| `npm run format`       | Format code with Prettier        |
+| `npm run format:check` | Check formatting without writing |
 
 ## Project Structure
 
 ```
-src/
-  app/           # Next.js App Router — pages, layouts, and routes
-  components/    # Shared React components (to be added)
-  lib/           # Utility functions and shared logic (to be added)
-public/          # Static assets
+capsule/
+├── app/                  # Next.js App Router
+│   ├── globals.css       # Global styles (Tailwind)
+│   ├── layout.tsx        # Root layout
+│   └── page.tsx          # Homepage
+├── .env.example          # Environment variable template
+├── eslint.config.mjs     # ESLint configuration
+├── next.config.ts        # Next.js configuration
+├── postcss.config.mjs    # PostCSS configuration
+├── tailwind.config.ts    # Tailwind CSS configuration
+└── tsconfig.json         # TypeScript configuration
 ```
+
+## Tech Stack
+
+- **Framework:** [Next.js 15](https://nextjs.org/) (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **Linting:** ESLint (next/core-web-vitals)
+- **Formatting:** Prettier
 
 ## Development Roadmap
 
