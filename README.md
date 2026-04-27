@@ -24,33 +24,73 @@ Capsule allows users to capture written notes, photos, and voice memos and seal 
 
 ## Getting Started
 
-> Setup instructions will be added once the project is scaffolded.
+### Prerequisites
 
-Prerequisites will include:
+- Node.js 18 or later
+- npm 9 or later
 
-- Node.js (version TBD)
-- A package manager such as npm or pnpm
-- Environment variables defined in `.env` (see `.env.example` once created)
+### Installation
 
 ```bash
 # Install dependencies
 npm install
+```
 
+### Environment variables
+
+Copy the example file and fill in any values:
+
+```bash
+cp .env.example .env.local
+```
+
+### Running locally
+
+```bash
 # Start the development server
 npm run dev
 ```
 
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Other commands
+
+```bash
+# Type-check
+npx tsc --noEmit
+
+# Lint
+npm run lint
+
+# Format
+npm run format
+
+# Production build
+npm run build
+npm run start
+```
+
+## Project Structure
+
+```
+src/
+  app/           # Next.js App Router — pages, layouts, and routes
+  components/    # Shared React components (to be added)
+  lib/           # Utility functions and shared logic (to be added)
+public/          # Static assets
+```
+
 ## Development Roadmap
 
-| Phase | Description | Status |
-|-------|-------------|--------|
-| 0 | Repository setup | In progress |
-| 1 | Project scaffolding and CI | Planned |
-| 2 | Core data models and API | Planned |
-| 3 | Capsule creation and storage | Planned |
-| 4 | Scheduled unlocking and notifications | Planned |
-| 5 | Frontend and mobile client | Planned |
-| 6 | Sharing and privacy controls | Planned |
+| Phase | Description                           | Status      |
+| ----- | ------------------------------------- | ----------- |
+| 0     | Repository setup                      | Done        |
+| 1     | Project scaffolding and CI            | In progress |
+| 2     | Core data models and API              | Planned     |
+| 3     | Capsule creation and storage          | Planned     |
+| 4     | Scheduled unlocking and notifications | Planned     |
+| 5     | Frontend and mobile client            | Planned     |
+| 6     | Sharing and privacy controls          | Planned     |
 
 ## Contributing
 
