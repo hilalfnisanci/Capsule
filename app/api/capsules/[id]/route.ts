@@ -83,6 +83,10 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: "invalid visibility value" }, { status: 422 });
   }
 
+  if (title !== undefined && title.trim().length > 255) {
+    return NextResponse.json({ error: "title must be 255 characters or fewer" }, { status: 422 });
+  }
+
   const updated = await prisma.capsule.update({
     where: { id },
     data: {
