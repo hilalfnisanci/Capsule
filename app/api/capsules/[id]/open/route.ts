@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { canRead, canViewContent, isEligibleToOpen } from "@/lib/capsule/access";
+import { canViewContent, isEligibleToOpen } from "@/lib/capsule/access";
 import { serialiseCapsuleDetail } from "@/lib/capsule/serialise";
 
 type RouteParams = { params: Promise<{ id: string }> };
@@ -27,10 +27,6 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
   if (!capsule) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
-  }
-
-  if (!canRead(capsule, userId)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   // Only the owner may trigger the LOCKED→OPENED transition.
