@@ -17,6 +17,7 @@ async function findCapsule(id: string) {
 // GET /api/capsules/[id]
 // ---------------------------------------------------------------------------
 export async function GET(request: NextRequest, { params }: RouteParams) {
+  // TODO: replace with real auth — x-user-id is forgeable (IDOR risk)
   const userId = request.headers.get("x-user-id");
   const { id } = await params;
 
@@ -49,6 +50,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 // Update mutable fields (title, description, visibility). Owner only, while LOCKED.
 // ---------------------------------------------------------------------------
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
+  // TODO: replace with real auth — x-user-id is forgeable (IDOR risk)
   const userId = request.headers.get("x-user-id");
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -99,6 +101,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 // Delete a capsule. Owner only, any status.
 // ---------------------------------------------------------------------------
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
+  // TODO: replace with real auth — x-user-id is forgeable (IDOR risk)
   const userId = request.headers.get("x-user-id");
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

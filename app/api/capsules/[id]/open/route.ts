@@ -8,9 +8,12 @@ type RouteParams = { params: Promise<{ id: string }> };
 // ---------------------------------------------------------------------------
 // POST /api/capsules/[id]/open
 // Transitions a LOCKED capsule to OPENED when the open date has passed.
-// Any user with read access may trigger opening (the date is the true gate).
+// Only the owner may trigger the state transition; the open date remains the
+// temporal gate. Restricting to the owner prevents non-owners from mutating
+// capsule state and keeps state changes auditable to a single actor.
 // ---------------------------------------------------------------------------
 export async function POST(request: NextRequest, { params }: RouteParams) {
+  // TODO: replace with real auth — x-user-id is forgeable (IDOR risk)
   const userId = request.headers.get("x-user-id");
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -27,6 +30,11 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
   }
 
   if (!canRead(capsule, userId)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  // Only the owner may trigger the LOCKED→OPENED transition.
+  if (capsule.userId !== userId) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
