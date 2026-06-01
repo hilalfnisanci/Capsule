@@ -7,6 +7,9 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  // Connection URL is intentionally omitted here; it is configured via
+  // prisma.config.ts (Prisma v5+ allows this). Add url = env("DATABASE_URL")
+  // if you need to use Prisma CLI commands without the config file.
 }
 
 // ------------------------------------------------------------------
@@ -75,7 +78,7 @@ model CapsuleMedia {
   url        String    // storage URL (e.g. S3 presigned or CDN URL)
   filename   String
   mimeType   String
-  sizeBytes  Int
+  sizeBytes  BigInt  // BIGINT to support files larger than 2 GB (INT overflows at ~2.147 GB)
 
   createdAt  DateTime  @default(now())
 

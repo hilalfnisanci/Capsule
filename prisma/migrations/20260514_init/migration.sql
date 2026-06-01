@@ -35,7 +35,7 @@ CREATE TABLE "CapsuleMedia" (
     "url"       TEXT         NOT NULL,
     "filename"  TEXT         NOT NULL,
     "mimeType"  TEXT         NOT NULL,
-    "sizeBytes" INTEGER      NOT NULL,
+    "sizeBytes" BIGINT       NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "CapsuleMedia_pkey" PRIMARY KEY ("id")

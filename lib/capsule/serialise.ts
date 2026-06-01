@@ -39,7 +39,7 @@ function serialiseMedia(m: CapsuleMedia): MediaResponse {
     url: m.url,
     filename: m.filename,
     mimeType: m.mimeType,
-    sizeBytes: m.sizeBytes,
+    sizeBytes: m.sizeBytes.toString(),
     createdAt: m.createdAt.toISOString(),
   };
 }

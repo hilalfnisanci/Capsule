@@ -71,6 +71,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (description !== undefined && description.trim().length > 10000) {
+    return NextResponse.json(
+      { error: "description must be 10 000 characters or fewer" },
+      { status: 422 }
+    );
+  }
+
   if (!openDateStr) {
     return NextResponse.json({ error: "openDate is required" }, { status: 422 });
   }

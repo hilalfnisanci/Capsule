@@ -55,7 +55,7 @@ export interface MediaResponse {
   url: string;
   filename: string;
   mimeType: string;
-  sizeBytes: number;
+  sizeBytes: string; // BigInt serialized as string to avoid JS integer precision loss
   createdAt: string;
 }
 

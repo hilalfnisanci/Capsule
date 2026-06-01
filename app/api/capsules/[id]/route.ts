@@ -95,6 +95,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
   }
 
+  if (description !== undefined && description.trim().length > 10000) {
+    return NextResponse.json(
+      { error: "description must be 10 000 characters or fewer" },
+      { status: 422 }
+    );
+  }
+
   // Use updateMany with a status guard to prevent TOCTOU: if a concurrent open
   // request fires between the canUpdate check and this write, count === 0 and
   // we return 409 instead of silently mutating an already-OPENED capsule.
@@ -116,7 +123,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     include: { media: true },
   });
 
-  return NextResponse.json({ capsule: serialiseCapsule(updated!) });
+  if (!updated) {
+    return NextResponse.json({ error: "Capsule not found after update" }, { status: 500 });
+  }
+
+  return NextResponse.json({ capsule: serialiseCapsule(updated) });
 }
 
 // ---------------------------------------------------------------------------
