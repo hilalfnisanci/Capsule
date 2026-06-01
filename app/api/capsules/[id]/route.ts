@@ -83,21 +83,40 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: "invalid visibility value" }, { status: 422 });
   }
 
-  if (title !== undefined && title.trim().length > 255) {
-    return NextResponse.json({ error: "title must be 255 characters or fewer" }, { status: 422 });
+  if (title !== undefined) {
+    if (typeof title !== "string") {
+      return NextResponse.json({ error: "title must be a string" }, { status: 422 });
+    }
+    if (title.trim() === "") {
+      return NextResponse.json({ error: "title cannot be empty" }, { status: 422 });
+    }
+    if (title.trim().length > 255) {
+      return NextResponse.json({ error: "title must be 255 characters or fewer" }, { status: 422 });
+    }
   }
 
-  const updated = await prisma.capsule.update({
-    where: { id },
+  // Use updateMany with a status guard to prevent TOCTOU: if a concurrent open
+  // request fires between the canUpdate check and this write, count === 0 and
+  // we return 409 instead of silently mutating an already-OPENED capsule.
+  const result = await prisma.capsule.updateMany({
+    where: { id, status: "LOCKED" },
     data: {
       ...(title !== undefined ? { title: title.trim() } : {}),
-      ...(description !== undefined ? { description: description.trim() } : {}),
+      ...(description !== undefined ? { description: description.trim() || null } : {}),
       ...(visibility !== undefined ? { visibility } : {}),
     },
+  });
+
+  if (result.count === 0) {
+    return NextResponse.json({ error: "Cannot modify an opened capsule" }, { status: 409 });
+  }
+
+  const updated = await prisma.capsule.findUnique({
+    where: { id },
     include: { media: true },
   });
 
-  return NextResponse.json({ capsule: serialiseCapsule(updated) });
+  return NextResponse.json({ capsule: serialiseCapsule(updated!) });
 }
 
 // ---------------------------------------------------------------------------

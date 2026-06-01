@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
   const capsule = await prisma.capsule.create({
     data: {
       title: title.trim(),
-      description: description?.trim() ?? null,
+      description: description?.trim() || null,
       userId,
       visibility,
       openDate,

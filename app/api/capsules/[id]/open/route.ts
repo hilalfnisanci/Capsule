@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { canViewContent, isEligibleToOpen } from "@/lib/capsule/access";
+import { isEligibleToOpen } from "@/lib/capsule/access";
 import { serialiseCapsuleDetail } from "@/lib/capsule/serialise";
 
 type RouteParams = { params: Promise<{ id: string }> };
@@ -48,12 +48,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     include: { media: true, sharedWith: true },
   });
 
-  const showContent = canViewContent(opened, userId);
-  const detail = serialiseCapsuleDetail(opened);
-
-  if (!showContent) {
-    return NextResponse.json({ capsule: { ...detail, description: null, media: [] } });
-  }
-
-  return NextResponse.json({ capsule: detail });
+  // The caller is the owner and the capsule is now OPENED, so canViewContent is
+  // always true here — no content masking needed.
+  return NextResponse.json({ capsule: serialiseCapsuleDetail(opened) });
 }
