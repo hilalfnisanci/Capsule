@@ -11,6 +11,7 @@ type RouteParams = { params: Promise<{ id: string }> };
 // Any user with read access may trigger the opening (the date is the true gate).
 // ---------------------------------------------------------------------------
 export async function POST(request: NextRequest, { params }: RouteParams) {
+  // TODO(auth): x-user-id is a placeholder — replace with verified JWT/session auth.
   const userId = request.headers.get("x-user-id");
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

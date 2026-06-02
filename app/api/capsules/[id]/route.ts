@@ -17,6 +17,7 @@ async function findCapsule(id: string) {
 // GET /api/capsules/[id]
 // ---------------------------------------------------------------------------
 export async function GET(request: NextRequest, { params }: RouteParams) {
+  // TODO(auth): x-user-id is a placeholder — replace with verified JWT/session auth.
   const userId = request.headers.get("x-user-id");
   const { id } = await params;
 
@@ -45,6 +46,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 // Update mutable fields (title, description, visibility). Owner only, while LOCKED.
 // ---------------------------------------------------------------------------
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
+  // TODO(auth): x-user-id is a placeholder — replace with verified JWT/session auth.
   const userId = request.headers.get("x-user-id");
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -71,6 +73,10 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
   const { title, description, visibility } = body;
 
+  if (title !== undefined && !title.trim()) {
+    return NextResponse.json({ error: "title must not be empty" }, { status: 422 });
+  }
+
   if (visibility !== undefined && !["PRIVATE", "SHARED", "PUBLIC"].includes(visibility)) {
     return NextResponse.json({ error: "invalid visibility value" }, { status: 422 });
   }
@@ -93,6 +99,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 // Delete a capsule. Owner only, any status.
 // ---------------------------------------------------------------------------
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
+  // TODO(auth): x-user-id is a placeholder — replace with verified JWT/session auth.
   const userId = request.headers.get("x-user-id");
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

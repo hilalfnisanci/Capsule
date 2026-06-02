@@ -15,11 +15,11 @@
   "dependencies": {
     "@prisma/client": "^7.8.0",
     "next": "15.5.15",
-    "prisma": "^7.8.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "prisma": "^7.8.0",
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19",

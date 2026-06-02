@@ -9,11 +9,13 @@ import type { CreateCapsuleInput } from "@/lib/capsule/types";
 // List capsules accessible to the current user.
 // ---------------------------------------------------------------------------
 export async function GET(request: NextRequest) {
+  // TODO(auth): x-user-id is a placeholder — replace with verified JWT/session auth.
   const userId = request.headers.get("x-user-id");
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // TODO: add cursor/limit pagination — unbounded PUBLIC capsule queries won't scale.
   const capsules = await prisma.capsule.findMany({
     where: {
       OR: [
@@ -44,6 +46,7 @@ export async function GET(request: NextRequest) {
 // Create a new capsule (LOCKED, owned by the requesting user).
 // ---------------------------------------------------------------------------
 export async function POST(request: NextRequest) {
+  // TODO(auth): x-user-id is a placeholder — replace with verified JWT/session auth.
   const userId = request.headers.get("x-user-id");
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
