@@ -1,0 +1,98 @@
+// Prisma schema for the Capsule app
+// learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ------------------------------------------------------------------
+// Enums
+// ------------------------------------------------------------------
+
+enum CapsuleStatus {
+  LOCKED // capsule is sealed; content is hidden from recipients
+  OPENED // open date has passed and the capsule has been opened
+}
+
+enum CapsuleVisibility {
+  PRIVATE // only the owner can view
+  SHARED  // owner + explicitly invited users can view
+  PUBLIC  // anyone can view (after open date)
+}
+
+enum MediaType {
+  IMAGE
+  AUDIO
+  VIDEO
+  DOCUMENT
+}
+
+// ------------------------------------------------------------------
+// Models
+// ------------------------------------------------------------------
+
+model Capsule {
+  id          String            @id @default(cuid())
+  title       String
+  description String?
+
+  // Ownership — references the auth user ID (e.g. NextAuth session user id)
+  userId      String
+
+  // Lifecycle state
+  status      CapsuleStatus     @default(LOCKED)
+  visibility  CapsuleVisibility @default(PRIVATE)
+
+  // Scheduled unlock: date/time after which the capsule may be opened
+  openDate    DateTime
+  // Set when the capsule is first opened; null while still locked
+  openedAt    DateTime?
+
+  // Timestamps
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  // Relations
+  media       CapsuleMedia[]
+  sharedWith  CapsuleShare[]
+
+  @@index([userId])
+  @@index([openDate])
+  @@index([status])
+}
+
+// Stores metadata for media attached to a capsule.
+// Actual file bytes live in object storage; this row holds the URL and metadata.
+model CapsuleMedia {
+  id        String    @id @default(cuid())
+  capsuleId String
+  capsule   Capsule   @relation(fields: [capsuleId], references: [id], onDelete: Cascade)
+
+  type      MediaType
+  url       String    // storage URL (e.g. S3 presigned or CDN URL)
+  filename  String
+  mimeType  String
+  sizeBytes Int
+
+  createdAt DateTime  @default(now())
+
+  @@index([capsuleId])
+}
+
+// Junction table for SHARED capsules.
+// Each row grants read access to one user beyond the owner.
+model CapsuleShare {
+  id        String   @id @default(cuid())
+  capsuleId String
+  capsule   Capsule  @relation(fields: [capsuleId], references: [id], onDelete: Cascade)
+
+  userId    String   // invited user ID
+  invitedAt DateTime @default(now())
+
+  @@unique([capsuleId, userId])
+  @@index([userId])
+}
