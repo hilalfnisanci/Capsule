@@ -1,0 +1,1 @@
+{"artifact_ref": {"kind": "github_pr", "number": 23}, "verdict": "complete", "summary": "Implemented capsule data model (Prisma schema + SQL migration), access-control rules, serialisation helpers, and REST API routes (CRUD + open transition). 27 unit tests pass."}
