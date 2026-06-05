@@ -99,10 +99,11 @@ export function canShare(capsule: Capsule, userId: string): boolean {
  *  - The capsule must currently be LOCKED.
  *  - The open date must be in the past (or equal to now).
  */
-export function isEligibleToOpen(capsule: Capsule, now: Date = new Date()): boolean {
-  return (
-    capsule.status === CapsuleStatus.LOCKED && capsule.openDate <= now
-  );
+export function isEligibleToOpen(
+  capsule: Capsule,
+  now: Date = new Date()
+): boolean {
+  return capsule.status === CapsuleStatus.LOCKED && capsule.openDate <= now;
 }
 
 /**
@@ -111,6 +112,9 @@ export function isEligibleToOpen(capsule: Capsule, now: Date = new Date()): bool
  * The open date must be strictly in the future to prevent creating capsules
  * that are immediately openable.
  */
-export function isValidOpenDate(openDate: Date, now: Date = new Date()): boolean {
+export function isValidOpenDate(
+  openDate: Date,
+  now: Date = new Date()
+): boolean {
   return openDate > now;
 }

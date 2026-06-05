@@ -1,6 +1,10 @@
 import type { Capsule, CapsuleMedia, CapsuleShare } from "@prisma/client";
 
-export type { CapsuleStatus, CapsuleVisibility, MediaType } from "@prisma/client";
+export type {
+  CapsuleStatus,
+  CapsuleVisibility,
+  MediaType,
+} from "@prisma/client";
 
 // ------------------------------------------------------------------
 // Re-exports with relations attached

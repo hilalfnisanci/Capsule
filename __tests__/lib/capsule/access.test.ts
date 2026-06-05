@@ -73,17 +73,23 @@ describe("canRead", () => {
 
   it("invited user can read a shared capsule", () => {
     const capsule = makeCapsule({ visibility: CapsuleVisibility.SHARED });
-    expect(canRead({ ...capsule, sharedWith: [makeShare(INVITED)] }, INVITED)).toBe(true);
+    expect(
+      canRead({ ...capsule, sharedWith: [makeShare(INVITED)] }, INVITED)
+    ).toBe(true);
   });
 
   it("non-invited user cannot read a shared capsule", () => {
     const capsule = makeCapsule({ visibility: CapsuleVisibility.SHARED });
-    expect(canRead({ ...capsule, sharedWith: [makeShare(INVITED)] }, OTHER)).toBe(false);
+    expect(
+      canRead({ ...capsule, sharedWith: [makeShare(INVITED)] }, OTHER)
+    ).toBe(false);
   });
 
   it("unauthenticated user cannot read a shared capsule", () => {
     const capsule = makeCapsule({ visibility: CapsuleVisibility.SHARED });
-    expect(canRead({ ...capsule, sharedWith: [makeShare(INVITED)] }, null)).toBe(false);
+    expect(
+      canRead({ ...capsule, sharedWith: [makeShare(INVITED)] }, null)
+    ).toBe(false);
   });
 });
 
@@ -102,7 +108,9 @@ describe("canViewContent", () => {
       status: CapsuleStatus.LOCKED,
       visibility: CapsuleVisibility.SHARED,
     });
-    expect(canViewContent({ ...capsule, sharedWith: [makeShare(INVITED)] }, INVITED)).toBe(false);
+    expect(
+      canViewContent({ ...capsule, sharedWith: [makeShare(INVITED)] }, INVITED)
+    ).toBe(false);
   });
 
   it("invited user can view content of an opened shared capsule", () => {
@@ -111,7 +119,9 @@ describe("canViewContent", () => {
       visibility: CapsuleVisibility.SHARED,
       openedAt: new Date(),
     });
-    expect(canViewContent({ ...capsule, sharedWith: [makeShare(INVITED)] }, INVITED)).toBe(true);
+    expect(
+      canViewContent({ ...capsule, sharedWith: [makeShare(INVITED)] }, INVITED)
+    ).toBe(true);
   });
 
   it("public opened capsule is viewable by anyone", () => {
@@ -143,7 +153,10 @@ describe("canUpdate", () => {
   });
 
   it("owner cannot update an opened capsule", () => {
-    const capsule = makeCapsule({ status: CapsuleStatus.OPENED, openedAt: new Date() });
+    const capsule = makeCapsule({
+      status: CapsuleStatus.OPENED,
+      openedAt: new Date(),
+    });
     expect(canUpdate(capsule, OWNER)).toBe(false);
   });
 
@@ -159,11 +172,15 @@ describe("canUpdate", () => {
 
 describe("canDelete", () => {
   it("owner can delete a locked capsule", () => {
-    expect(canDelete(makeCapsule({ status: CapsuleStatus.LOCKED }), OWNER)).toBe(true);
+    expect(
+      canDelete(makeCapsule({ status: CapsuleStatus.LOCKED }), OWNER)
+    ).toBe(true);
   });
 
   it("owner can delete an opened capsule", () => {
-    expect(canDelete(makeCapsule({ status: CapsuleStatus.OPENED }), OWNER)).toBe(true);
+    expect(
+      canDelete(makeCapsule({ status: CapsuleStatus.OPENED }), OWNER)
+    ).toBe(true);
   });
 
   it("non-owner cannot delete a capsule", () => {

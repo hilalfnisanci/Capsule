@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { canRead, canViewContent, canUpdate, canDelete } from "@/lib/capsule/access";
-import { serialiseCapsuleDetail, serialiseCapsule } from "@/lib/capsule/serialise";
+import {
+  canRead,
+  canViewContent,
+  canUpdate,
+  canDelete,
+} from "@/lib/capsule/access";
+import {
+  serialiseCapsuleDetail,
+  serialiseCapsule,
+} from "@/lib/capsule/serialise";
 import type { UpdateCapsuleInput } from "@/lib/capsule/types";
 
 type RouteParams = { params: Promise<{ id: string }> };
@@ -79,19 +87,34 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
   const { title, description, visibility } = body;
 
-  if (visibility !== undefined && !["PRIVATE", "SHARED", "PUBLIC"].includes(visibility)) {
-    return NextResponse.json({ error: "invalid visibility value" }, { status: 422 });
+  if (
+    visibility !== undefined &&
+    !["PRIVATE", "SHARED", "PUBLIC"].includes(visibility)
+  ) {
+    return NextResponse.json(
+      { error: "invalid visibility value" },
+      { status: 422 }
+    );
   }
 
   if (title !== undefined) {
     if (typeof title !== "string") {
-      return NextResponse.json({ error: "title must be a string" }, { status: 422 });
+      return NextResponse.json(
+        { error: "title must be a string" },
+        { status: 422 }
+      );
     }
     if (title.trim() === "") {
-      return NextResponse.json({ error: "title cannot be empty" }, { status: 422 });
+      return NextResponse.json(
+        { error: "title cannot be empty" },
+        { status: 422 }
+      );
     }
     if (title.trim().length > 255) {
-      return NextResponse.json({ error: "title must be 255 characters or fewer" }, { status: 422 });
+      return NextResponse.json(
+        { error: "title must be 255 characters or fewer" },
+        { status: 422 }
+      );
     }
   }
 
@@ -109,13 +132,18 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     where: { id, status: "LOCKED" },
     data: {
       ...(title !== undefined ? { title: title.trim() } : {}),
-      ...(description !== undefined ? { description: description.trim() || null } : {}),
+      ...(description !== undefined
+        ? { description: description.trim() || null }
+        : {}),
       ...(visibility !== undefined ? { visibility } : {}),
     },
   });
 
   if (result.count === 0) {
-    return NextResponse.json({ error: "Cannot modify an opened capsule" }, { status: 409 });
+    return NextResponse.json(
+      { error: "Cannot modify an opened capsule" },
+      { status: 409 }
+    );
   }
 
   const updated = await prisma.capsule.findUnique({
@@ -124,7 +152,10 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
   });
 
   if (!updated) {
-    return NextResponse.json({ error: "Capsule not found after update" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Capsule not found after update" },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json({ capsule: serialiseCapsule(updated) });

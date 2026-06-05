@@ -58,7 +58,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const { title, description, visibility = "PRIVATE", openDate: openDateStr } = body;
+  const {
+    title,
+    description,
+    visibility = "PRIVATE",
+    openDate: openDateStr,
+  } = body;
 
   if (!title || typeof title !== "string" || title.trim() === "") {
     return NextResponse.json({ error: "title is required" }, { status: 422 });
@@ -79,7 +84,10 @@ export async function POST(request: NextRequest) {
   }
 
   if (!openDateStr) {
-    return NextResponse.json({ error: "openDate is required" }, { status: 422 });
+    return NextResponse.json(
+      { error: "openDate is required" },
+      { status: 422 }
+    );
   }
 
   const openDate = new Date(openDateStr);
@@ -98,7 +106,10 @@ export async function POST(request: NextRequest) {
   }
 
   if (!["PRIVATE", "SHARED", "PUBLIC"].includes(visibility)) {
-    return NextResponse.json({ error: "invalid visibility value" }, { status: 422 });
+    return NextResponse.json(
+      { error: "invalid visibility value" },
+      { status: 422 }
+    );
   }
 
   const capsule = await prisma.capsule.create({
@@ -112,5 +123,8 @@ export async function POST(request: NextRequest) {
     include: { media: true },
   });
 
-  return NextResponse.json({ capsule: serialiseCapsule(capsule) }, { status: 201 });
+  return NextResponse.json(
+    { capsule: serialiseCapsule(capsule) },
+    { status: 201 }
+  );
 }

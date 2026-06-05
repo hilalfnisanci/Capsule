@@ -6,7 +6,9 @@ import type {
   ShareResponse,
 } from "./types";
 
-export function serialiseCapsule(capsule: Capsule & { media: CapsuleMedia[] }): CapsuleResponse {
+export function serialiseCapsule(
+  capsule: Capsule & { media: CapsuleMedia[] }
+): CapsuleResponse {
   return {
     id: capsule.id,
     title: capsule.title,
