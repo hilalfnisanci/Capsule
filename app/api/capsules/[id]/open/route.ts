@@ -13,7 +13,7 @@ export async function POST(request: Request, context: RouteContext) {
   const requesterId = requesterIdFromHeaders(request.headers);
 
   if (!requesterId) {
-    return NextResponse.json({ error: "x-user-id header is required" }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { id } = await context.params;
