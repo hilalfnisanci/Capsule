@@ -86,6 +86,16 @@ describe("capsule model", () => {
 
     assert.equal(canReadCapsuleMetadata(publicCapsule, { requesterId: "user-2" }), true);
     assert.equal(canReadCapsuleContent(publicCapsule, { requesterId: "user-2" }), true);
-    assert.equal(canReadCapsuleContent(publicCapsule, {}), true);
+    assert.equal(canReadCapsuleContent(publicCapsule, { requesterId: null }), true);
+  });
+
+  it("denies unauthenticated requesters private and locked capsule access", () => {
+    const lockedPublicCapsule = createTestCapsule({ visibility: "public" });
+    const openedPrivateCapsule = openCapsule(createTestCapsule(), { requesterId: "user-1", now: afterFuture });
+
+    assert.equal(canReadCapsuleMetadata(lockedPublicCapsule, { requesterId: null }), false);
+    assert.equal(canReadCapsuleContent(lockedPublicCapsule, { requesterId: null }), false);
+    assert.equal(canReadCapsuleMetadata(openedPrivateCapsule, { requesterId: null }), false);
+    assert.equal(canReadCapsuleContent(openedPrivateCapsule, { requesterId: null }), false);
   });
 });

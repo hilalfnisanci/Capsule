@@ -29,7 +29,7 @@ export type CapsuleCreateInput = {
 };
 
 export type CapsuleAccessContext = {
-  requesterId?: string;
+  requesterId: string | null;
   now?: Date;
 };
 
@@ -60,7 +60,7 @@ export function getCapsuleState(capsule: Pick<Capsule, "openedAt">): CapsuleStat
 
 export function isCapsuleOwner(
   capsule: Pick<Capsule, "ownerId">,
-  requesterId?: string,
+  requesterId: string | null,
 ): boolean {
   return Boolean(requesterId && capsule.ownerId === requesterId);
 }

@@ -5,6 +5,7 @@ import {
   canReadCapsuleMetadata,
   getCapsuleState,
 } from "./model";
+import { getAuthenticatedUserId } from "@/lib/auth/user";
 
 export type CapsuleResponse = {
   id: string;
@@ -29,8 +30,8 @@ type CapsuleRequestBody = {
   visibility?: unknown;
 };
 
-export function requesterIdFromHeaders(headers: Headers): string | undefined {
-  return headers.get("x-user-id")?.trim() || undefined;
+export function requesterIdFromHeaders(headers: Headers): string | null {
+  return getAuthenticatedUserId({ headers });
 }
 
 export function parseCapsuleCreateBody(payload: CapsuleRequestBody, ownerId: string): CapsuleCreateInput {
@@ -43,7 +44,7 @@ export function parseCapsuleCreateBody(payload: CapsuleRequestBody, ownerId: str
   };
 }
 
-export function toCapsuleResponse(capsule: Capsule, requesterId?: string, now = new Date()): CapsuleResponse {
+export function toCapsuleResponse(capsule: Capsule, requesterId: string | null, now = new Date()): CapsuleResponse {
   return {
     id: capsule.id,
     ownerId: capsule.ownerId,
@@ -61,6 +62,6 @@ export function toCapsuleResponse(capsule: Capsule, requesterId?: string, now = 
   };
 }
 
-export function filterReadableCapsules(capsules: Capsule[], requesterId?: string): Capsule[] {
+export function filterReadableCapsules(capsules: Capsule[], requesterId: string | null): Capsule[] {
   return capsules.filter((capsule) => canReadCapsuleMetadata(capsule, { requesterId }));
 }
