@@ -48,6 +48,23 @@ describe("capsule model", () => {
     );
   });
 
+  it("rejects invalid visibility and media metadata", () => {
+    assert.throws(
+      () => createTestCapsule({ visibility: "shared" }),
+      (error) => error instanceof CapsuleValidationError && error.message === "visibility must be private or public",
+    );
+    assert.throws(
+      () => createTestCapsule({ mediaCount: 13 }),
+      (error) => error instanceof CapsuleValidationError && error.message === "mediaCount must be between 0 and 12",
+    );
+    assert.throws(
+      () => createTestCapsule({ mediaTotalBytes: 104857601 }),
+      (error) =>
+        error instanceof CapsuleValidationError &&
+        error.message === "mediaTotalBytes must be between 0 and 104857600",
+    );
+  });
+
   it("only allows the owner to open a capsule on or after openAt", () => {
     const capsule = createTestCapsule();
 

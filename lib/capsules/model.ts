@@ -23,7 +23,7 @@ export type CapsuleCreateInput = {
   title: string;
   body: string;
   openAt: Date;
-  visibility?: CapsuleVisibility;
+  visibility?: CapsuleVisibility | string;
   mediaCount?: number;
   mediaTotalBytes?: number;
 };
@@ -123,7 +123,7 @@ export function assertValidCapsuleCreateInput(input: CapsuleCreateInput, now = n
     throw new CapsuleValidationError("openAt must be in the future");
   }
 
-  if (input.visibility && !CAPSULE_VISIBILITIES.includes(input.visibility)) {
+  if (input.visibility && !CAPSULE_VISIBILITIES.includes(input.visibility as CapsuleVisibility)) {
     throw new CapsuleValidationError("visibility must be private or public");
   }
 
@@ -151,13 +151,14 @@ export function createCapsuleRecord(
   now = new Date(),
 ): Capsule {
   assertValidCapsuleCreateInput(input, now);
+  const visibility = input.visibility ?? "private";
 
   return {
     id,
     ownerId: input.ownerId,
     title: input.title.trim(),
     body: input.body.trim(),
-    visibility: input.visibility ?? "private",
+    visibility: visibility as CapsuleVisibility,
     openAt: input.openAt,
     openedAt: null,
     createdAt: now,

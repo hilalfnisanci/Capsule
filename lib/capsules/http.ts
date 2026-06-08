@@ -28,6 +28,8 @@ type CapsuleRequestBody = {
   body?: unknown;
   openAt?: unknown;
   visibility?: unknown;
+  mediaCount?: unknown;
+  mediaTotalBytes?: unknown;
 };
 
 export function requesterIdFromHeaders(headers: Headers): string | null {
@@ -40,7 +42,19 @@ export function parseCapsuleCreateBody(payload: CapsuleRequestBody, ownerId: str
     title: typeof payload.title === "string" ? payload.title : "",
     body: typeof payload.body === "string" ? payload.body : "",
     openAt: typeof payload.openAt === "string" ? new Date(payload.openAt) : new Date(Number.NaN),
-    visibility: payload.visibility === "public" ? "public" : payload.visibility === "private" ? "private" : undefined,
+    visibility: typeof payload.visibility === "string" ? payload.visibility : undefined,
+    mediaCount:
+      payload.mediaCount === undefined
+        ? undefined
+        : typeof payload.mediaCount === "number"
+          ? payload.mediaCount
+          : Number.NaN,
+    mediaTotalBytes:
+      payload.mediaTotalBytes === undefined
+        ? undefined
+        : typeof payload.mediaTotalBytes === "number"
+          ? payload.mediaTotalBytes
+          : Number.NaN,
   };
 }
 
