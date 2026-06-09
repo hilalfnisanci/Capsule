@@ -26,7 +26,7 @@ Capsule allows users to capture written notes, photos, and voice memos and seal 
 
 ### Prerequisites
 
-- Node.js 20+ (required by the Vitest 4 / jsdom 29 test toolchain)
+- Node.js 18+
 - npm, yarn, or pnpm
 
 ### Installation
