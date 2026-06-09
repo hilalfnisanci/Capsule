@@ -13,6 +13,13 @@ export default function Home() {
       >
         Start a capsule →
       </Link>
+      <p className="text-sm text-gray-500">
+        Press{" "}
+        <kbd className="rounded border border-gray-300 bg-white px-1.5 py-0.5 font-mono text-xs text-gray-700">
+          n
+        </kbd>{" "}
+        to start
+      </p>
     </section>
   );
 }
